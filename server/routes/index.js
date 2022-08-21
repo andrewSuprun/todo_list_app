@@ -14,5 +14,5 @@ router.delete("/todo/:id", tasks.delete);
 
 router.patch("/todo/:id", tasks.markAsCompleted);
 
-
+router.get("/getAll", tasks.getAllCompleted )
 module.exports = router

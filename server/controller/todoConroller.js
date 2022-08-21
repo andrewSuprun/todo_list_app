@@ -57,6 +57,15 @@ class TodoController {
     )
     res.sendStatus(204)
   }
+
+  async getAllCompleted(req, res) {
+   const completedTodos = await Todo.findAll({
+      where: {
+        completed: "true"
+      }
+    })
+    res.json(completedTodos)
+  }
 }
 
 module.exports = new TodoController()
