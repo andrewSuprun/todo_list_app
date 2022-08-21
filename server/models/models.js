@@ -9,7 +9,7 @@ const User = sequelize.define('user', {
 const Todo = sequelize.define('todo', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   description: { type: DataTypes.STRING},
-  completed: { type: DataTypes.STRING}
+  completed: { type: DataTypes.BOOLEAN }
 } )
 
 User.hasMany(Todo)

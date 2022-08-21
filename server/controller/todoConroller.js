@@ -4,8 +4,10 @@ const ApiError = require('../error/ApiError')
 class TodoController {
   async create(req, res) {
     try {
-      const { description } = req.body
-      const todo = await Todo.create({ description, completed: false})
+      const  description  = req.body.description || '';
+      const userId = req.headers.userId
+
+      const todo = await Todo.create({ description, userId })
       return res.json(todo)
     } catch (error) {
       next(ApiError.badRequest(error.message))
@@ -18,29 +20,42 @@ class TodoController {
   }
 
   async getOne(req, res) {
-    const {id} = req.params
-    const todo = await Todo.findOne(
-        {
-            where: {id},
-        },
-    )
+    const id = req.params.id
+    const todo = await Todo.findOne({
+      where: { id },
+    })
+    console.log('This is my data', todo, id)
     return res.json(todo)
-}
-
-  async delete(req, res) {
-    const {id} = req.params
-    await Todo.destroy({
-      where: {id}
-    });
-    return
   }
 
-  async update(req, res) {
-    const {id} = req.params
-    await Todo.update({
-      where:{id}
+  async delete(req, res) {
+    const id = req.params.id
+    await Todo.destroy({
+      where: { id }
     })
-    return
+    res.sendStatus(204)
+  }
+
+  async update(req, res) {//catch e
+    const id = req.params.id
+    const { description, completed} = req.body
+    await Todo.update({description, completed},
+      {
+        where: { id }
+      }
+    )
+    res.sendStatus(204)
+  }
+
+  async markAsCompleted(req, res) {
+    const id = req.params.id
+    const { completed } = req.body
+    await Todo.update({completed},
+      {
+        where: {id}
+      }
+    )
+    res.sendStatus(204)
   }
 }
 
